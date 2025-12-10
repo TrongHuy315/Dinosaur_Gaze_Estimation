@@ -4,8 +4,10 @@ dinosaurPath = "./assets/image/dinosaur"
 
 class Dinosaur:
     def __init__(self):
+        self.__default_yPos = 425
+
         self.__xPos = 100
-        self.__yPos = 425
+        self.__yPos = self.__default_yPos
         
         self.__dino_run = [
             pygame.image.load(dinosaurPath + "/left_run.png"),
@@ -19,6 +21,52 @@ class Dinosaur:
         
         self.__dino_jump = pygame.image.load(dinosaurPath + "/jump.png")
         
+        self.__isRunning = True
+        self.__isJumping = False
+        self.__isDucking = False
+        
+        self.__gravity = -20
+        
+    def moveListen(self, events):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN:
+                    if not self.__isJumping:
+                        self.__isRunning = False
+                        self.__isDucking = True
+                        
+                    if self.__isJumping:
+                        self.__gravity += 10
+
+                if event.key == pygame.K_UP:
+                    if not self.__isJumping:
+                        self.__isRunning = False
+                        self.__isDucking = False
+                        self.__isJumping = True
+                        self.__gravity = -20
+                        
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    if not self.__isJumping:
+                        self.__isDucking = False
+                        self.__isRunning = True
+
+        if self.__isJumping:
+            self.__yPos += self.__gravity
+            self.__gravity += 1
+
+            if self.__yPos >= self.__default_yPos:
+                self.__yPos = self.__default_yPos
+                self.__isJumping = False
+                self.__isRunning = True
+
+            return [self.__dino_jump, self.__dino_jump]
+
+        if self.__isDucking:
+            return self.__dino_duck
+
+        return self.__dino_run
+    
     def getXPos(self):
         return self.__xPos
         

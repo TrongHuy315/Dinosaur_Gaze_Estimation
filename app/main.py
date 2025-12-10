@@ -19,7 +19,9 @@ frame = 0
 x1 = horizon.getXPos()
 x2 = horizon.getHorizonWidth()
 while running:
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    
+    for event in events:
         if event.type == pygame.QUIT:
             running = False
             
@@ -37,13 +39,15 @@ while running:
     screen.blit(horizon.getHorizon(), (x1, horizon.getYPos()))
     screen.blit(horizon.getHorizon(), (x2, horizon.getYPos()))
     
+    imgs = dino.moveListen(events)
+    
     if frame >= 20:
         frame = 0
     
     if (frame >= 10):
-        img = dino.getDinoRun(1)
+        img = imgs[1]
     else:
-        img = dino.getDinoRun(0)
+        img = imgs[0]
     
     screen.blit(img, (dino.getXPos(), dino.getYPos()))
     
