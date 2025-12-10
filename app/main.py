@@ -1,22 +1,44 @@
 import pygame
+from dinosaur import Dinosaur
+from horizon import Horizon
 
-SCREEN_SIZE = (1280, 720)
+SCREEN_SIZE = (1780, 1220)
 
 pygame.init()
 screen = pygame.display.set_mode(SCREEN_SIZE)
+
+pygame.display.set_caption("Dinosaur Gaze Estimation")
 clock = pygame.time.Clock()
 running = True
 
+dino = Dinosaur()
+horizon = Horizon()
+
+frame = 0
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             
-    screen.fill("purple")
+    screen.fill("white")
+    # print(frame)
     
+    if frame >= 20:
+        frame = 0
     
+    if (frame >= 10):
+        img = dino.getDinoRun(1)
+    else:
+        img = dino.getDinoRun(0)
+    
+    screen.blit(horizon.getHorizon(), (horizon.getXPos(), horizon.getYPos()))
+    screen.blit(img, (dino.getXPos(), dino.getYPos()))
+    
+    pygame.display.update()
     pygame.display.flip()
     
     clock.tick(60)
+    
+    frame += 1
     
 pygame.quit()
