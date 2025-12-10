@@ -17,3 +17,6 @@ class Horizon:
     
     def getYPos(self):
         return self.__yPos
+    
+    def getHorizonWidth(self):
+        return self.__horizon.get_width()

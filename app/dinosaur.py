@@ -5,7 +5,7 @@ dinosaurPath = "./assets/image/dinosaur"
 class Dinosaur:
     def __init__(self):
         self.__xPos = 100
-        self.__yPos = 100
+        self.__yPos = 425
         
         self.__dino_run = [
             pygame.image.load(dinosaurPath + "/left_run.png"),
