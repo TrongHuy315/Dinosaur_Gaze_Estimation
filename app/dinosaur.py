@@ -24,32 +24,43 @@ class Dinosaur:
         self.__isRunning = True
         self.__isJumping = False
         self.__isDucking = False
-        
+
+        self.__run_height = self.__dino_run[0].get_height()
+        self.__duck_height = self.__dino_duck[0].get_height()
+
         self.__gravity = -20
         
     def moveListen(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
+
                 if event.key == pygame.K_DOWN:
-                    if not self.__isJumping:
+                    if not self.__isJumping and not self.__isDucking:
                         self.__isRunning = False
                         self.__isDucking = True
-                        
+                        diff = self.__run_height - self.__duck_height
+                        self.__yPos += diff
+
                     if self.__isJumping:
                         self.__gravity += 10
 
                 if event.key == pygame.K_UP:
                     if not self.__isJumping:
-                        self.__isRunning = False
+                        if self.__isDucking:
+                            diff = self.__run_height - self.__duck_height
+                            self.__yPos -= diff
+                        
                         self.__isDucking = False
+                        self.__isRunning = False
                         self.__isJumping = True
                         self.__gravity = -20
-                        
+
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_DOWN:
-                    if not self.__isJumping:
-                        self.__isDucking = False
-                        self.__isRunning = True
+                if event.key == pygame.K_DOWN and self.__isDucking:
+                    self.__isDucking = False
+                    self.__isRunning = True
+                    diff = self.__run_height - self.__duck_height
+                    self.__yPos -= diff
 
         if self.__isJumping:
             self.__yPos += self.__gravity

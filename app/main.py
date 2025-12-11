@@ -5,6 +5,7 @@ from bird import Bird
 from cactus import Cactus
 from cloud import Cloud
 import random
+from collision import CollisionManager
 
 SCREEN_SIZE = (1280, 620)
 SPEED = 5
@@ -18,12 +19,13 @@ running = True
 
 dino = Dinosaur()
 horizon = Horizon()
+collision = CollisionManager()
 
 MIN_OBJECT_DISTANCE = 280    
 BIRD_CHANCE = 0.015
 CACTUS_CHANCE = 0.02
 CLOUD_CHANCE = 0.005
-BIRD_HEIGHTS = [380, 420, 450]
+BIRD_HEIGHTS = [380, 400, 450]
 
 birds = []
 cloud = []
@@ -59,6 +61,11 @@ while running:
     screen.blit(horizon.getHorizon(), (x1, horizon.getYPos()))
     screen.blit(horizon.getHorizon(), (x2, horizon.getYPos()))
     imgs = dino.moveListen(events)
+
+    if (frame >= 10):
+        dino_img = imgs[1]
+    else:
+        dino_img = imgs[0]
     right_edge = SCREEN_SIZE[0]
 
     if random.random() < CACTUS_CHANCE:
@@ -79,12 +86,17 @@ while running:
         cloud.append(Cloud())
 
     for c in cactus_list[:]:
+        if collision.pixel_collide(dino, c, dino_image=dino_img, obstacle_image=c.getImage()):
+            print("Collision cactus")
         c.setXPos(c.getXPos() - c.speed)
         screen.blit(c.getImage(), (c.getXPos(), c.getYPos()))
         if c.getXPos() < -c.width:
             cactus_list.remove(c)
 
     for b in birds[:]:
+        bird_img = b.getBirdFly(b.anim_index)
+        if collision.pixel_collide(dino, b, dino_image=dino_img, obstacle_image=bird_img):
+            print("Collision bird")
         b.setXPos(b.getXPos() - b.speed)
         b.anim_timer += 1
         if b.anim_timer >= 8:
