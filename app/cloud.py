@@ -11,7 +11,7 @@ class Cloud:
         self.x = 1280
         self.y = random.randint(80, 200)
 
-        self.speed = 2 
+        self.speed = 1
 
     def update(self):
         self.x -= self.speed
