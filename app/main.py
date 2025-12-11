@@ -10,7 +10,7 @@ from game_over import GameOverScreen
 from scoreboard import Scoreboard 
 
 SCREEN_SIZE = (1280, 620)
-SPEED = 5
+SPEED = 10
 
 pygame.init()
 screen = pygame.display.set_mode(SCREEN_SIZE)
@@ -23,9 +23,9 @@ collision = CollisionManager()
 game_over_screen = GameOverScreen(SCREEN_SIZE)
 scoreboard = Scoreboard() 
 
-MIN_OBJECT_DISTANCE = 270    
-BIRD_CHANCE = 0.015
-CACTUS_CHANCE = 0.02
+MIN_OBJECT_DISTANCE = 300    
+BIRD_CHANCE = 0.01
+CACTUS_CHANCE = 0.015
 CLOUD_CHANCE = 0.004
 BIRD_HEIGHTS = [380, 400, 450]
 
@@ -51,7 +51,7 @@ def reset_game():
     dino.isJumping = False
     dino.isDucking = False
     
-    SPEED = 5 
+    SPEED = 10
     x1 = horizon.getXPos()
     x2 = horizon.getHorizonWidth()
     
