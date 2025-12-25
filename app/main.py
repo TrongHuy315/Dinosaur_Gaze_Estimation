@@ -23,7 +23,7 @@ collision = CollisionManager()
 game_over_screen = GameOverScreen(SCREEN_SIZE)
 scoreboard = Scoreboard() 
 
-MIN_OBJECT_DISTANCE = 300    
+MIN_OBJECT_DISTANCE = 350    
 BIRD_CHANCE = 0.01
 CACTUS_CHANCE = 0.015
 CLOUD_CHANCE = 0.004

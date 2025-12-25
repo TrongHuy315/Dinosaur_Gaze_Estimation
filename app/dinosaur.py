@@ -25,6 +25,8 @@ class Dinosaur:
         self.__isJumping = False
         self.__isDucking = False
 
+        # Request to duck when landing (pressed down during jump)
+        self.__duckRequested = False
         self.__run_height = self.__dino_run[0].get_height()
         self.__duck_height = self.__dino_duck[0].get_height()
 
@@ -41,7 +43,9 @@ class Dinosaur:
                         diff = self.__run_height - self.__duck_height
                         self.__yPos += diff
 
+                    # If pressed while jumping, request duck on landing
                     if self.__isJumping:
+                        self.__duckRequested = True
                         self.__gravity += 10
 
                 if event.key == pygame.K_UP:
@@ -56,11 +60,16 @@ class Dinosaur:
                         self.__gravity = -20
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_DOWN and self.__isDucking:
-                    self.__isDucking = False
-                    self.__isRunning = True
-                    diff = self.__run_height - self.__duck_height
-                    self.__yPos -= diff
+                if event.key == pygame.K_DOWN:
+                    # If currently ducking, stand up
+                    if self.__isDucking:
+                        self.__isDucking = False
+                        self.__isRunning = True
+                        diff = self.__run_height - self.__duck_height
+                        self.__yPos -= diff
+                    # If a duck was requested during jump but key released, cancel request
+                    if self.__duckRequested:
+                        self.__duckRequested = False
 
         if self.__isJumping:
             self.__yPos += self.__gravity
@@ -69,7 +78,15 @@ class Dinosaur:
             if self.__yPos >= self.__default_yPos:
                 self.__yPos = self.__default_yPos
                 self.__isJumping = False
-                self.__isRunning = True
+                # If player requested a duck while jumping, go straight to duck
+                if self.__duckRequested:
+                    self.__duckRequested = False
+                    self.__isDucking = True
+                    self.__isRunning = False
+                    diff = self.__run_height - self.__duck_height
+                    self.__yPos += diff
+                else:
+                    self.__isRunning = True
 
             return [self.__dino_jump, self.__dino_jump]
 
